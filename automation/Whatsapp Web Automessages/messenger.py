@@ -43,8 +43,10 @@ def send_message(contact_name, message):
         text_box.click()
         text_box.send_keys(contact_name)
 
+        sleep(1)
         driver.find_element(By.XPATH, f'//*[@role="gridcell"]').click()
 
+        sleep(1)
         chat_box = driver.find_element(By.XPATH, '//*[@aria-label="Type a message"]')
 
         chat_box.click()

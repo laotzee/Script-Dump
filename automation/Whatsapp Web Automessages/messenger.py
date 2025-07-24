@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.common import ElementClickInterceptedException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -30,6 +29,7 @@ def send_message(contact_name, message):
     try:
         service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver.implicitly_wait(10)
         print(f"Selenium is attempting to use user data from: {CHROMIUM_USER_DATA_DIR}")
 
         driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": custom_user_agent})

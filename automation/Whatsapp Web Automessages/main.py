@@ -1,4 +1,4 @@
-from dataManager import increase_counter, read_counter, get_data
+from data_manager import increase_counter, read_counter, get_data
 from messenger import send_message
 
 def send_next_message(contact_name):

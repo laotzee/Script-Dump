@@ -1,0 +1,10 @@
+#! /bin/bash
+
+pomi=~/projects/pomi/src/main.py
+
+python3 $pomi $1
+
+play -n synth .1 sin 250 gain 0 2>/dev/null
+
+
+

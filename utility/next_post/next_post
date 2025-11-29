@@ -1,0 +1,18 @@
+#! /bin/bash
+
+file=~/.bashrc
+template=~/writing/template.md
+var_name=w1
+posts_path=~/writing/posts/eng/drafts
+
+posts_num=$(ls $posts_path | wc -l)
+next_num=$((posts_num))
+new_post="${posts_path}/${next_num}.md"
+new_line="export ${var_name}=${new_post}"
+
+cp ${template} ${new_post}
+
+sed -i "/^export ${var_name}=/c\\
+${new_line}" "$file"
+
+

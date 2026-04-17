@@ -30,20 +30,26 @@ def convert_to_pdf(input_file, output_dir):
         print(f"Stderr: {e.stderr}")
 
 
+def get_job_details(*args: str) -> dict[str, str]:
+    """Given a sequence of fields, asks the user for the information and
+    returns a dictionary with the answers"""
+    return {val: input(f"{val}: ") for val in args}
+
+
 def process_letter() -> None:
-    company = input("Company you are applying to: ").rstrip()
-    role = input("Role you are applying to: ").rstrip()
-    country = input("Country you are applying to: ").rstrip()
-    folder_name = company.replace(" ", "_")
+    fields = ("company", "role", "country")
+    data = get_job_details(*fields)
+    data["date"] = now.strftime("%d.%m.%Y")
+
+    folder_name = data["company"].replace(" ", "_")
     makeFolder(folder_name)
 
     doc = Document("template.odt")
     body = doc.body
 
-    body.replace("{{date}}", date)
-    body.replace("{{role}}", role)
-    body.replace("{{company}}", company)
-    body.replace("{{country}}", country)
+    for key, val in data.items():
+        placeholder = "{{" + key + "}}"
+        body.replace(placeholder, val)
 
     doc.save(f"{folder_name}/{odt_name}")
     convert_to_pdf(f"{folder_name}/{odt_name}", folder_name)
@@ -51,7 +57,6 @@ def process_letter() -> None:
 
 odt_name = "cover_letter.odt"
 now = datetime.now()
-date = now.strftime("%d.%m.%Y")
 
 if __name__ == "__main__":
     process_letter()

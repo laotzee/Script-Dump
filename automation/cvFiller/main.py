@@ -39,7 +39,7 @@ def get_job_details(*args: str) -> dict[str, str]:
 def process_letter() -> None:
     fields = ("company", "role", "country")
     data = get_job_details(*fields)
-    data["date"] = now.strftime("%d.%m.%Y")
+    data["date"] = datetime.now().strftime("%d.%m.%Y")
 
     folder_name = data["company"].replace(" ", "_")
     makeFolder(folder_name)
@@ -56,7 +56,6 @@ def process_letter() -> None:
 
 
 odt_name = "cover_letter.odt"
-now = datetime.now()
 
 if __name__ == "__main__":
     process_letter()

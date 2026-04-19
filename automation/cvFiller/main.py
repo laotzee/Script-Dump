@@ -55,6 +55,20 @@ def process_letter() -> None:
     convert_to_pdf(f"{folder_name}/{odt_name}", folder_name)
 
 
+def process_email(template):
+    required_fields = ("role", "company")
+    data = get_job_details(*required_fields)
+    data["date"] = datetime.now().strftime("%d.%m.%Y")
+
+    with open(template) as f:
+        email = f.read()
+        for key, val in data.items():
+            placeholder = "{{" + key + "}}"
+            email = email.replace(placeholder, val)
+        return email
+
+
+email_template = "email_es_template.txt"
 odt_name = "cover_letter.odt"
 
 if __name__ == "__main__":

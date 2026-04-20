@@ -1,5 +1,6 @@
 from datetime import datetime
-from odfdo import Document
+from odfdo import Document, Body
+from odfdo.body import Text
 import subprocess
 import os
 
@@ -36,6 +37,20 @@ def get_job_details(*args: str) -> dict[str, str]:
     return {val: input(f"{val}: ") for val in args}
 
 
+def replace_fields(template: Text | Body | str, data: dict[str, str]):
+    """Placeholders inside of the template are replaced in-place with
+    information contained in data"""
+    if isinstance(template, (Text, Body)):
+        for key, val in data.items():
+            placeholder = "{{" + key + "}}"
+            template.replace(placeholder, val)
+    else:
+        processed_template = template
+        for key, val in data.items():
+            placeholder = "{{" + key + "}}"
+            processed_template = processed_template.replace(placeholder, val)
+
+
 def process_letter() -> None:
     fields = ("company", "role", "country")
     data = get_job_details(*fields)
@@ -47,9 +62,7 @@ def process_letter() -> None:
     doc = Document("template.odt")
     body = doc.body
 
-    for key, val in data.items():
-        placeholder = "{{" + key + "}}"
-        body.replace(placeholder, val)
+    replace_fields(body, data)
 
     doc.save(f"{folder_name}/{odt_name}")
     convert_to_pdf(f"{folder_name}/{odt_name}", folder_name)

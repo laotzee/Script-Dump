@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Sequence
 from odfdo import Document, Body
 from odfdo.body import Text
 import subprocess
@@ -51,26 +52,24 @@ def replace_fields(template: Text | Body | str, data: dict[str, str]):
             processed_template = processed_template.replace(placeholder, val)
 
 
-def process_letter() -> None:
-    fields = ("company", "role", "country")
+def process_letter(template: str, fields: Sequence[str]) -> None:
     data = get_job_details(*fields)
     data["date"] = datetime.now().strftime("%d.%m.%Y")
 
     folder_name = data["company"].replace(" ", "_")
     makeFolder(folder_name)
 
-    doc = Document("template.odt")
+    doc = Document(ODT_TEMPLATE)
     body = doc.body
 
     replace_fields(body, data)
 
-    doc.save(f"{folder_name}/{odt_name}")
-    convert_to_pdf(f"{folder_name}/{odt_name}", folder_name)
+    doc.save(f"{folder_name}/{ODT_OUTPUT_NAME}")
+    convert_to_pdf(f"{folder_name}/{ODT_OUTPUT_NAME}", folder_name)
 
 
-def process_email(template):
-    required_fields = ("role", "company")
-    data = get_job_details(*required_fields)
+def process_email(template: str, fields: Sequence[str]):
+    data = get_job_details(*fields)
     data["date"] = datetime.now().strftime("%d.%m.%Y")
 
     with open(template) as f:
@@ -81,8 +80,12 @@ def process_email(template):
         return email
 
 
-email_template = "email_es_template.txt"
-odt_name = "cover_letter.odt"
+EMAIL_ES_TEMPLATE = "email_es_template.txt"
+EMAIL_EN_TEMPLATE = "email_en_template.txt"
+ODT_OUTPUT_NAME = "cover_letter.odt"
+ODT_TEMPLATE = "template.odt"
+LETTER_FIELDS = ("company", "role", "country")
+EMAIL_FIELDS = ("company", "role")
 
 if __name__ == "__main__":
-    process_letter()
+    process_letter(ODT_TEMPLATE, LETTER_FIELDS)

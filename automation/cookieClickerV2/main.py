@@ -1,7 +1,6 @@
 import asyncio
 from camoufox.async_api import AsyncCamoufox
 from camoufox import DefaultAddons
-from browserforge.fingerprints import Screen
 
 
 async def run():
@@ -27,6 +26,9 @@ async def run():
                     await page.evaluate("""
                         const cookie = document.querySelector("#bigCookie");
                         if (cookie) cookie.click();
+
+                        const shimmer = document.querySelector("#shimmers .shimmer");
+                        if (shimmer) shimmer.click();
 
                         const crates = document.querySelectorAll('.crate.upgrade.enabled');
                         if (crates.length > 0) crates[crates.length - 1].click();

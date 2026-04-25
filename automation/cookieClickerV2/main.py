@@ -33,8 +33,11 @@ async def run():
                         const crates = document.querySelectorAll('.crate.upgrade.enabled');
                         if (crates.length > 0) crates[crates.length - 1].click();
 
-                        const products = document.querySelectorAll('.product.unlocked.enabled');
-                        if (products.length > 0) products[products.length - 1].click();
+                        const products = document.querySelectorAll('.product.unlocked');
+                        const lastElements = Array.from(products).slice(-3);
+                        const enabledLastElements = lastElements.filter(el => el.classList.contains('enabled'));
+
+                        if (enabledLastElements.length > 0) enabledLastElements[enabledLastElements.length - 1].click();
                     """)
 
                 except Exception as e:

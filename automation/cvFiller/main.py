@@ -88,4 +88,15 @@ LETTER_FIELDS = ("company", "role", "country")
 EMAIL_FIELDS = ("company", "role")
 
 if __name__ == "__main__":
-    process_letter(ODT_TEMPLATE, LETTER_FIELDS)
+    option = input("1) letter and email\n2) letter\n3) email\n")
+    if option == "1":  # both
+        process_letter(ODT_TEMPLATE, LETTER_FIELDS)
+        email = process_email(EMAIL_ES_TEMPLATE, EMAIL_FIELDS)
+        print(email)
+    elif option == "2":  # letter
+        process_letter(ODT_TEMPLATE, LETTER_FIELDS)
+    elif option == "3":  # email
+        email = process_email(EMAIL_ES_TEMPLATE, EMAIL_FIELDS)
+        print(email)
+    else:
+        print("Invalid input given")

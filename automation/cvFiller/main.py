@@ -35,7 +35,9 @@ def convert_to_pdf(input_file, output_dir):
 def get_job_details(*args: str) -> dict[str, str]:
     """Given a sequence of fields, asks the user for the information and
     returns a dictionary with the answers"""
-    return {val: input(f"{val}: ") for val in args}
+    data = {val: input(f"{val}: ") for val in args}
+    data["date"] = datetime.now().strftime("%d.%m.%Y")
+    return data
 
 
 def replace_fields(template: Text | Body | str, data: dict[str, str]):
@@ -52,29 +54,24 @@ def replace_fields(template: Text | Body | str, data: dict[str, str]):
             processed_template = processed_template.replace(placeholder, val)
 
 
-def process_letter(template: str, fields: Sequence[str]) -> None:
-    data = get_job_details(*fields)
-    data["date"] = datetime.now().strftime("%d.%m.%Y")
-
-    folder_name = data["company"].replace(" ", "_")
+def process_letter(template: str, field_data: dict[str, str]) -> None:
+    folder_name = field_data["company"].replace(" ", "_")
     makeFolder(folder_name)
 
     doc = Document(template)
     body = doc.body
 
-    replace_fields(body, data)
+    replace_fields(body, field_data)
 
     doc.save(f"{folder_name}/{ODT_OUTPUT_NAME}")
     convert_to_pdf(f"{folder_name}/{ODT_OUTPUT_NAME}", folder_name)
 
 
-def process_email(template: str, fields: Sequence[str]):
-    data = get_job_details(*fields)
-    data["date"] = datetime.now().strftime("%d.%m.%Y")
+def process_email(template: str, field_data: dict[str, str]):
 
     with open(template) as f:
         email = f.read()
-        for key, val in data.items():
+        for key, val in field_data.items():
             placeholder = "{{" + key + "}}"
             email = email.replace(placeholder, val)
         return email
@@ -94,13 +91,17 @@ if __name__ == "__main__":
 
     option = input("1) letter and email\n2) letter\n3) email\n")
     if option == "1":  # both
-        process_letter(template, LETTER_FIELDS)
-        email = process_email(EMAIL_EN_TEMPLATE, EMAIL_FIELDS)
+        fields = set(LETTER_FIELDS + EMAIL_FIELDS)
+        fields = get_job_details(*fields)
+        process_letter(template, fields)
+        email = process_email(EMAIL_EN_TEMPLATE, fields)
         print(email)
     elif option == "2":  # letter
-        process_letter(template, LETTER_FIELDS)
+        fields = get_job_details(*LETTER_FIELDS)
+        process_letter(template, fields)
     elif option == "3":  # email
-        email = process_email(EMAIL_ES_TEMPLATE, EMAIL_FIELDS)
+        fields = get_job_details(*EMAIL_FIELDS)
+        email = process_email(EMAIL_ES_TEMPLATE, fields)
         print(email)
     else:
         print("Invalid input given")

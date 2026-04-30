@@ -59,7 +59,7 @@ def process_letter(template: str, fields: Sequence[str]) -> None:
     folder_name = data["company"].replace(" ", "_")
     makeFolder(folder_name)
 
-    doc = Document(ODT_TEMPLATE)
+    doc = Document(template)
     body = doc.body
 
     replace_fields(body, data)
@@ -83,18 +83,22 @@ def process_email(template: str, fields: Sequence[str]):
 EMAIL_ES_TEMPLATE = "email_es_template.txt"
 EMAIL_EN_TEMPLATE = "email_en_template.txt"
 ODT_OUTPUT_NAME = "cover_letter.odt"
-ODT_TEMPLATE = "template.odt"
+ODT_TEMPLATE_DEV = "templateDEV.odt"
+ODT_TEMPLATE_SYS = "templateSYS.odt"
 LETTER_FIELDS = ("company", "role", "country")
 EMAIL_FIELDS = ("company", "role")
 
 if __name__ == "__main__":
+    option = input("1) Development\n2) Systems\n")
+    template = ODT_TEMPLATE_DEV if option == 1 else ODT_TEMPLATE_SYS
+
     option = input("1) letter and email\n2) letter\n3) email\n")
     if option == "1":  # both
-        process_letter(ODT_TEMPLATE, LETTER_FIELDS)
-        email = process_email(EMAIL_ES_TEMPLATE, EMAIL_FIELDS)
+        process_letter(template, LETTER_FIELDS)
+        email = process_email(EMAIL_EN_TEMPLATE, EMAIL_FIELDS)
         print(email)
     elif option == "2":  # letter
-        process_letter(ODT_TEMPLATE, LETTER_FIELDS)
+        process_letter(template, LETTER_FIELDS)
     elif option == "3":  # email
         email = process_email(EMAIL_ES_TEMPLATE, EMAIL_FIELDS)
         print(email)

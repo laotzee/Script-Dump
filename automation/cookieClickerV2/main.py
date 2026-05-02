@@ -30,11 +30,15 @@ async def run():
                         const shimmer = document.querySelector("#shimmers .shimmer");
                         if (shimmer) shimmer.click();
 
-                        const crates = document.querySelectorAll('.crate.upgrade.enabled');
-                        if (crates.length > 0) crates[crates.length - 1].click();
+                        const excludedIds = ['74', '85'];
+
+                        const upgrades = Array.from(document.querySelectorAll('.storeSection.upgradeBox .crate')).filter(el => !excludedIds.includes(el.getAttribute('data-id')));
+                        if (upgrades.length > 0) {
+                            upgrades[upgrades.length - 1].click();
+                        }
 
                         const products = document.querySelectorAll('.product.unlocked');
-                        const lastElements = Array.from(products).slice(-3);
+                        const lastElements = Array.from(products).slice(-2);
                         const enabledLastElements = lastElements.filter(el => el.classList.contains('enabled'));
 
                         if (enabledLastElements.length > 0) enabledLastElements[enabledLastElements.length - 1].click();

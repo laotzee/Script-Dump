@@ -29,12 +29,6 @@ async def run():
 
                         const shimmer = document.querySelector("#shimmers .shimmer");
                         if (shimmer) shimmer.click();
-
-                        const products = document.querySelectorAll('.product.unlocked');
-                        const lastElements = Array.from(products).slice(-2);
-                        const enabledLastElements = lastElements.filter(el => el.classList.contains('enabled'));
-
-                        if (enabledLastElements.length > 0) enabledLastElements[enabledLastElements.length - 1].click();
                     """)
 
                 except Exception as e:

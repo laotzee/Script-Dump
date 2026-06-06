@@ -82,26 +82,34 @@ EMAIL_EN_TEMPLATE = "email_en_template.txt"
 ODT_OUTPUT_NAME = "cover_letter.odt"
 ODT_TEMPLATE_DEV = "templateDEV.odt"
 ODT_TEMPLATE_SYS = "templateSYS.odt"
-LETTER_FIELDS = ("company", "role", "country")
+LETTER_FIELDS = ("company", "role")
 EMAIL_FIELDS = ("company", "role")
 
-if __name__ == "__main__":
-    option = input("1) Development\n2) Systems\n")
-    template = ODT_TEMPLATE_DEV if option == 1 else ODT_TEMPLATE_SYS
 
-    option = input("1) letter and email\n2) letter\n3) email\n")
-    if option == "1":  # both
-        fields = set(LETTER_FIELDS + EMAIL_FIELDS)
-        fields = get_job_details(*fields)
-        process_letter(template, fields)
-        email = process_email(EMAIL_EN_TEMPLATE, fields)
-        print(email)
-    elif option == "2":  # letter
-        fields = get_job_details(*LETTER_FIELDS)
-        process_letter(template, fields)
-    elif option == "3":  # email
-        fields = get_job_details(*EMAIL_FIELDS)
-        email = process_email(EMAIL_ES_TEMPLATE, fields)
-        print(email)
+if __name__ == "__main__":
+    mode = input("1) Spanish Email\n2) English options")
+    if mode == "1":
+        print(process_email(EMAIL_ES_TEMPLATE, get_job_details(*EMAIL_FIELDS)))
+
+    elif mode == "2":
+        option = input("1) Development\n2) Systems\n")
+        template = ODT_TEMPLATE_DEV if option == 1 else ODT_TEMPLATE_SYS
+
+        option = input("1) letter and email\n2) letter\n3) email\n")
+        if option == "1":  # both
+            fields = set(LETTER_FIELDS + EMAIL_FIELDS)
+            fields = get_job_details(*fields)
+            process_letter(template, fields)
+            email = process_email(EMAIL_EN_TEMPLATE, fields)
+            print(email)
+        elif option == "2":  # letter
+            fields = get_job_details(*LETTER_FIELDS)
+            process_letter(template, fields)
+        elif option == "3":  # email
+            fields = get_job_details(*EMAIL_FIELDS)
+            email = process_email(EMAIL_EN_TEMPLATE, fields)
+            print(email)
+        else:
+            print("Invalid input given")
     else:
-        print("Invalid input given")
+        print("No proper option selected")

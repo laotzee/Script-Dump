@@ -94,10 +94,12 @@ def process_letter(template: str, field_data: dict[str, str]) -> None:
 
     replace_fields(body, field_data)
 
-    pdf_path = f"{folder_name}/{ODT_OUTPUT_NAME}"
+    pdf_folder_path = f"{folder_name}/{ODT_OUTPUT_NAME}"
+    pdf_path = f"{folder_name}/cover_letter.pdf"
 
-    doc.save(pdf_path)
-    convert_to_pdf(pdf_path, folder_name)
+    doc.save(pdf_folder_path)
+    convert_to_pdf(pdf_folder_path, folder_name)
+    are_fields_cleared(pdf_path)
 
 
 def process_email(template: str, field_data: dict[str, str]):
@@ -110,13 +112,6 @@ def process_email(template: str, field_data: dict[str, str]):
         return email
 
 
-wrong = "/home/laotze/projects/script-dump/automation/cvFiller/wong_file.pdf"
-right = "/home/laotze/projects/script-dump/automation/cvFiller/old/Deloitte/cover_letter.pdf"
-
-are_fields_cleared(right)
-are_fields_cleared(wrong)
-
-"""
 if __name__ == "__main__":
     mode = input("1) Spanish Email\n2) English options")
     if mode == "1":
@@ -147,4 +142,3 @@ if __name__ == "__main__":
             print("Invalid input given")
     else:
         print("No proper option selected")
-"""

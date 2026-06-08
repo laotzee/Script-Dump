@@ -1,9 +1,28 @@
 from datetime import datetime
-from typing import Sequence
+from pypdf import PdfReader
 from odfdo import Document, Body
 from odfdo.body import Text
 import subprocess
 import os
+
+
+def are_fields_cleared(pdf_path, fields):
+    """
+    Reads a PDF file and asserts the strings from args are not present
+    """
+    reader = PdfReader(pdf_path)
+
+    full_text = ""
+    for page in reader.pages:
+        text = page.extract_text()
+        if text:
+            full_text += text
+
+    for val in fields:
+        placeholder = "{{" + val + "}}"
+        assert placeholder not in full_text, (
+            f"String '{placeholder}' was found in the PDF."
+        )
 
 
 def makeFolder(output_dir):
@@ -63,8 +82,10 @@ def process_letter(template: str, field_data: dict[str, str]) -> None:
 
     replace_fields(body, field_data)
 
-    doc.save(f"{folder_name}/{ODT_OUTPUT_NAME}")
-    convert_to_pdf(f"{folder_name}/{ODT_OUTPUT_NAME}", folder_name)
+    pdf_path = f"{folder_name}/{ODT_OUTPUT_NAME}"
+
+    doc.save(pdf_path)
+    convert_to_pdf(pdf_path, folder_name)
 
 
 def process_email(template: str, field_data: dict[str, str]):
@@ -82,8 +103,8 @@ EMAIL_EN_TEMPLATE = "email_en_template.txt"
 ODT_OUTPUT_NAME = "cover_letter.odt"
 ODT_TEMPLATE_DEV = "templateDEV.odt"
 ODT_TEMPLATE_SYS = "templateSYS.odt"
-LETTER_FIELDS = ("company", "role")
-EMAIL_FIELDS = ("company", "role")
+LETTER_FIELDS = ["company", "role"]
+EMAIL_FIELDS = ["company", "role"]
 DEFAULT_COUNTRY = "Germany"
 
 

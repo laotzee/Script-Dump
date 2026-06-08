@@ -4,6 +4,7 @@ from odfdo import Document, Body
 from odfdo.body import Text
 import subprocess
 import os
+import re
 
 
 EMAIL_ES_TEMPLATE = "email_es_template.txt"
@@ -16,9 +17,10 @@ EMAIL_FIELDS = ["company", "role"]
 DEFAULT_COUNTRY = "Germany"
 
 
-def are_fields_cleared(pdf_path, fields):
+def are_fields_cleared(pdf_path):
     """
-    Reads a PDF file and asserts the strings from args are not present
+    Reads a PDF file and asserts that no dynamic template fields
+    matching {{ word }} or {{word}} are left behind.
     """
     reader = PdfReader(pdf_path)
 
@@ -28,11 +30,11 @@ def are_fields_cleared(pdf_path, fields):
         if text:
             full_text += text
 
-    for val in fields:
-        placeholder = "{{" + val + "}}"
-        assert placeholder not in full_text, (
-            f"String '{placeholder}' was found in the PDF."
-        )
+    template_pattern = r"\{\{\s*(.+?)\s*\}\}"
+
+    found_fields = re.findall(template_pattern, full_text)
+
+    assert not found_fields, f"Unfilled template fields found in PDF: {found_fields}"
 
 
 def makeFolder(output_dir):
@@ -108,6 +110,13 @@ def process_email(template: str, field_data: dict[str, str]):
         return email
 
 
+wrong = "/home/laotze/projects/script-dump/automation/cvFiller/wong_file.pdf"
+right = "/home/laotze/projects/script-dump/automation/cvFiller/old/Deloitte/cover_letter.pdf"
+
+are_fields_cleared(right)
+are_fields_cleared(wrong)
+
+"""
 if __name__ == "__main__":
     mode = input("1) Spanish Email\n2) English options")
     if mode == "1":
@@ -138,3 +147,4 @@ if __name__ == "__main__":
             print("Invalid input given")
     else:
         print("No proper option selected")
+"""

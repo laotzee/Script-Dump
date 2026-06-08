@@ -6,6 +6,16 @@ import subprocess
 import os
 
 
+EMAIL_ES_TEMPLATE = "email_es_template.txt"
+EMAIL_EN_TEMPLATE = "email_en_template.txt"
+ODT_OUTPUT_NAME = "cover_letter.odt"
+ODT_TEMPLATE_DEV = "templateDEV.odt"
+ODT_TEMPLATE_SYS = "templateSYS.odt"
+LETTER_FIELDS = ["company", "role"]
+EMAIL_FIELDS = ["company", "role"]
+DEFAULT_COUNTRY = "Germany"
+
+
 def are_fields_cleared(pdf_path, fields):
     """
     Reads a PDF file and asserts the strings from args are not present
@@ -96,16 +106,6 @@ def process_email(template: str, field_data: dict[str, str]):
             placeholder = "{{" + key + "}}"
             email = email.replace(placeholder, val)
         return email
-
-
-EMAIL_ES_TEMPLATE = "email_es_template.txt"
-EMAIL_EN_TEMPLATE = "email_en_template.txt"
-ODT_OUTPUT_NAME = "cover_letter.odt"
-ODT_TEMPLATE_DEV = "templateDEV.odt"
-ODT_TEMPLATE_SYS = "templateSYS.odt"
-LETTER_FIELDS = ["company", "role"]
-EMAIL_FIELDS = ["company", "role"]
-DEFAULT_COUNTRY = "Germany"
 
 
 if __name__ == "__main__":

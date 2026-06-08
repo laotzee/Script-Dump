@@ -84,6 +84,7 @@ ODT_TEMPLATE_DEV = "templateDEV.odt"
 ODT_TEMPLATE_SYS = "templateSYS.odt"
 LETTER_FIELDS = ("company", "role")
 EMAIL_FIELDS = ("company", "role")
+DEFAULT_COUNTRY = "Germany"
 
 
 if __name__ == "__main__":
@@ -99,14 +100,17 @@ if __name__ == "__main__":
         if option == "1":  # both
             fields = set(LETTER_FIELDS + EMAIL_FIELDS)
             fields = get_job_details(*fields)
+            fields["country"] = DEFAULT_COUNTRY
             process_letter(template, fields)
             email = process_email(EMAIL_EN_TEMPLATE, fields)
             print(email)
         elif option == "2":  # letter
             fields = get_job_details(*LETTER_FIELDS)
+            fields["country"] = DEFAULT_COUNTRY
             process_letter(template, fields)
         elif option == "3":  # email
             fields = get_job_details(*EMAIL_FIELDS)
+            fields["country"] = DEFAULT_COUNTRY
             email = process_email(EMAIL_EN_TEMPLATE, fields)
             print(email)
         else:

@@ -12,9 +12,9 @@ EMAIL_EN_TEMPLATE = "email_en_template.txt"
 ODT_OUTPUT_NAME = "cover_letter.odt"
 ODT_TEMPLATE_DEV = "templateDEV.odt"
 ODT_TEMPLATE_SYS = "templateSYS.odt"
-LETTER_FIELDS = ["company", "role"]
+LETTER_FIELDS = ["company", "role", "country"]
 EMAIL_FIELDS = ["company", "role"]
-DEFAULT_COUNTRY = "Germany"
+DEFAULT_COUNTRY = None
 
 
 def are_fields_cleared(pdf_path):
@@ -68,6 +68,8 @@ def get_job_details(*args: str) -> dict[str, str]:
     returns a dictionary with the answers"""
     data = {val: input(f"{val}: ") for val in args}
     data["date"] = datetime.now().strftime("%d.%m.%Y")
+    if DEFAULT_COUNTRY:
+        data["country"] = DEFAULT_COUNTRY
     return data
 
 
@@ -125,17 +127,14 @@ if __name__ == "__main__":
         if option == "1":  # both
             fields = set(LETTER_FIELDS + EMAIL_FIELDS)
             fields = get_job_details(*fields)
-            fields["country"] = DEFAULT_COUNTRY
             process_letter(template, fields)
             email = process_email(EMAIL_EN_TEMPLATE, fields)
             print(email)
         elif option == "2":  # letter
             fields = get_job_details(*LETTER_FIELDS)
-            fields["country"] = DEFAULT_COUNTRY
             process_letter(template, fields)
         elif option == "3":  # email
             fields = get_job_details(*EMAIL_FIELDS)
-            fields["country"] = DEFAULT_COUNTRY
             email = process_email(EMAIL_EN_TEMPLATE, fields)
             print(email)
         else:

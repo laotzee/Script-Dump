@@ -1,0 +1,7 @@
+# Watcher on
+
+It checks on a server running a python bot. The return values work as follow:
+
+- 0: Bot is running
+- 1: Bot is not running
+- 255: Unreachable server

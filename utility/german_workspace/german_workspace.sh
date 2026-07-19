@@ -1,14 +1,12 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-current_notes="a2-2.csv"
-current_folder="/home/laotze/Downloads/A1.2/[TutsNode.com] - Best Way to Learn German Language - Beginner Level 2-A1.2/2. Unit 2 - Reisen (Traveling)"
-last_lesson="6. 2.02 - Modalverben (Modal verbs).mp4"
+current_notes="a22-2.csv"
+current_folder="/home/laotze/Downloads/A2.2/03. Unit 2 - Auf dem Flohmarkt (At the flea market)"
+current_lesson="/home/laotze/notes/german/a22-2.csv"
 
-cd "$current_folder"
+cd "$current_folder" || echo "Folder does not exist" >&2
 
 nohup thunar . &
-nohup mpv "$last_lesson" &
+nohup mpv "$current_lesson" &
 
-cd
-
-alacritty -e nvim ./notes/german/$current_notes
+alacritty -e nvim ~/notes/german/$current_notes

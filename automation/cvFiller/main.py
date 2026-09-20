@@ -12,6 +12,7 @@ EMAIL_EN_TEMPLATE = "email_en_template.txt"
 ODT_OUTPUT_NAME = "cover_letter.odt"
 ODT_TEMPLATE_DEV = "templateDEV.odt"
 ODT_TEMPLATE_SYS = "templateSYS.odt"
+ODT_TEMPLATE_SIMPLE = "template_simple.odt"
 LETTER_FIELDS = ["company", "role", "country"]
 EMAIL_FIELDS = ["company", "role"]
 DEFAULT_COUNTRY = None
@@ -121,9 +122,9 @@ if __name__ == "__main__":
 
     elif mode == "2":
         option = input("1) Development\n2) Systems\n")
-        template = ODT_TEMPLATE_DEV if option == 1 else ODT_TEMPLATE_SYS
+        template = ODT_TEMPLATE_DEV if option == "1" else ODT_TEMPLATE_SYS
 
-        option = input("1) letter and email\n2) letter\n3) email\n")
+        option = input("1) letter and email\n2) letter\n3) email\n4) Simple letter")
         if option == "1":  # both
             fields = set(LETTER_FIELDS + EMAIL_FIELDS)
             fields = get_job_details(*fields)
@@ -137,6 +138,9 @@ if __name__ == "__main__":
             fields = get_job_details(*EMAIL_FIELDS)
             email = process_email(EMAIL_EN_TEMPLATE, fields)
             print(email)
+        elif option == "4":  # email
+            fields = get_job_details(*EMAIL_FIELDS)
+            process_letter(ODT_TEMPLATE_SIMPLE, fields)
         else:
             print("Invalid input given")
     else:
